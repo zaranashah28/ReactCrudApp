@@ -2,7 +2,9 @@ import React,{useState,useEffect} from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 
+
 const Home = () => {
+
     const [users,setUsers] = useState([])
     useEffect(() =>{
       loadUsers();
@@ -13,12 +15,23 @@ const Home = () => {
         setUsers(result.data.reverse())
     }
 
+    const deleteUser = async(id) =>{
+         await axios.delete(`http://localhost:3001/users/${id}`)
+      loadUsers();
+       alert(`${id} deleted`)
+        
+    }
+
     return (
         <div className="container">
-            <div className="py-4">
+              
+     
+            <div className="py-2">
+         
                 <h1>Home page</h1>
-
-                <table class="table border shadow">
+             
+    <table class="table border shadow">
+  
   <thead class="thead-dark">
     <tr>
       <th scope="col">#</th>
@@ -38,9 +51,9 @@ const Home = () => {
               <td>{user.username}</td>
               <td>{user.email}</td>
               <td>
-                  <Link className="btn btn-primary mr-2">View</Link>
-                  <Link className="btn btn-outline-primary mr-2">Edit</Link>
-                  <Link className="btn btn-danger mr-2">Delete</Link>
+                  <Link exact to ={`users/${user.id}`} className="btn btn-primary mr-2">View</Link>
+                  <Link exact to ={`/users/edit/${user.id}`} className="btn btn-outline-primary mr-2">Edit</Link>
+                  <Link className="btn btn-danger mr-2" onClick={() => deleteUser(user.id)}>Delete</Link>
 
               </td>
           </tr>
@@ -48,12 +61,10 @@ const Home = () => {
   }
   </tbody>
 </table>
+</div>
+</div>
 
-
-        </div>
-
-        </div>
-
+       
     )
 }
 
